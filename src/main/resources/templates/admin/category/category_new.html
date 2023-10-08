@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <title>Dashboard - SB Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet"/>
+    <link href="../../css/styles_admin.css" rel="stylesheet"/>
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"/>
+
+    <!-- Bootstrap Font Icon CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"/>
+</head>
+
+<body class="sb-nav-fixed">
+<div id="layoutSidenav">
+    <div id="layoutSidenav_content">
+
+        <div class="container-fluid px-4">
+            <section class="h-100 ">
+                <div class="container py-5 h-100">
+                    <div class="row d-flex justify-content-center align-items-center h-100">
+                        <div class="col">
+                            <div class="card  my-4">
+                                <div class="row g-0">
+
+                                    <div class="col-xl">
+
+                                        <h3 class="mb-5 text-uppercase text-center" th:text="${message}"></h3>
+                                        <div th:if="${category.category_id != 0}">
+                                            <h3 class="mt-5 text-uppercase text-center">修正カテゴリー</h3>
+                                        </div>
+                                        <div th:if="${category.category_id == 0}">
+                                            <h3 class="mt-5 text-uppercase text-center">新カテゴリ－</h3>
+                                        </div>
+                                    </div>
+                                    <form  th:action="${category.category_id} != 0? @{/admin/update_category} : @{/admin/new_category}"
+                                           method="post">
+                                        <div class="card-body p-md-5 text-black">
+                                            <div class="row ">
+                                                <div class="d-block col">
+
+                                                    <div class="col-md mb-4">
+                                                        <div class="form-outline">
+                                                            <input type="number" id="form3Example1m"
+                                                                   th:field="${category.category_id}"
+                                                                   th:value="${category.category_id}"
+                                                                   class="form-control form-control-lg"/>
+                                                            <label class="form-label"
+                                                                   for="form3Example1m">カテゴリー番号</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md mb-4">
+                                                        <div class="form-outline">
+                                                            <input type="text" id="form3Example1n"
+                                                                   class="form-control form-control-lg"
+                                                                   th:field="${category.category_name}"
+                                                                   th:value="${category.category_name}"/>
+                                                            <label class="form-label"
+                                                                   for="form3Example1n">カテゴリー名</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex justify-content-center">
+                                                        <div class="d-flex justify-content-end pt-3"
+                                                             th:if="${category.category_id != 0}">
+                                                            <a class="btn btn-dark  btn-lg ms-2" href="/admin/all_category">
+                                                                 前のページに戻ります
+
+                                                            </a>
+                                                        </div>
+                                                        <div class="d-flex justify-content-end pt-3"
+                                                             th:if="${category.category_id == 0}">
+                                                            <button type="submit" class="btn btn-dark btn-lg ms-2">登録
+                                                            </button>
+                                                        </div>
+                                                        <div class="d-flex" th:if="${category.category_id != 0}">
+                                                            <div class="d-flex justify-content-end pt-3">
+                                                                <a class="btn btn-dark btn-lg ms-2" th:href="@{/admin/delete_category/(category_id=${category.category_id})}"> 消す
+                                                                </a>
+                                                            </div>
+                                                            <div class="d-flex justify-content-end pt-3">
+                                                                <button type="submit" class="btn btn-dark btn-lg ms-2" > 修正
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+        </div>
+
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
+        crossorigin="anonymous"></script>
+<script src="../../js/datatables-simple-demo.js"></script>
+<!--preview before upload image-->
+<script type="text/javascript">
+        function previewImage(event) {
+           var input = event.target;
+           var image = document.getElementById('preview');
+           if (input.files && input.files[0]) {
+              var reader = new FileReader();
+              reader.onload = function(e) {
+                 image.src = e.target.result;
+              }
+              reader.readAsDataURL(input.files[0]);
+           }
+        }
+
+
+
+
+
+
+
+
+</script>
+</body>
+
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <title>Ecommerce store</title>
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet"/>
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="../../css/styles.css" rel="stylesheet"/>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+</head>
+<body>
+<!-- Navigation-->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container px-4 px-lg-5">
+        <a class="navbar-brand" href="/">Ecommerce store</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                <li class="nav-item"><a class="nav-link active" aria-current="page" href="/">ホーム</a></li>
+            </ul>
+            <div class="d-flex justify-content-between">
+
+                <div class="d-flex align-items-center">
+                    <form class=" d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
+                        <div class="input-group d-flex">
+                            <input class="form-control" type="text" placeholder="Search for..."
+                                   aria-label="Search for..." aria-describedby="btnNavbarSearch"/>
+                            <button class="btn btn-dark" id="btnNavbarSearch" type="button"><i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                    <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-person-circle"></i></a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                <div th:if="${user.user_id != 0}">
+                                    <div th:text="'よこそ ' + ${user.user_name} +' さん'"></div>
+
+                                    <li><a class="dropdown-item" th:href="@{/edit_user/(user_id=${user.user_id})}">Settings</a>
+                                    </li>
+                                    <li><a class="dropdown-item" href="/login">Logout</a></li>
+                                </div>
+                                <div th:if="${user.user_id == 0}">
+                                    <div>
+                                        <li><a class="dropdown-item" href="/login">login</a></li>
+                                    </div>
+                                </div>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <form action="/view_order" class="d-flex ">
+                <button class="btn btn-outline-dark" type="submit">
+                    <i class="bi-cart-fill me-1"></i>
+                    Cart
+                    <span class="badge bg-dark text-white ms-1 rounded-pill"
+                          th:text="${session.totalQuantityOrderSession}"></span>
+                </button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<!-- Header-->
+<header class="bg-dark py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <img src="../../images/okaidoku_202309_last_sale_1200x100.png">
+        </div>
+    </div>
+</header>
+<!-- Section-->
+<section class="h-100 h-custom">
+    <div class="container h-100 py-5">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col">
+
+                <div class="table-responsive">
+                    <table class="table text-center">
+                        <thead>
+                        <tr>
+                            <th scope="col" class="h5">カート</th>
+                            <th scope="col">商品名</th>
+                            <th scope="col">数</th>
+                            <th scope="col">単価</th>
+                            <th scope="col">カテゴリー</th>
+                            <th scope="col">金額</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <h5 class="text-center" th:text="${message}"></h5>
+                        <tr th:each="order : ${orders}">
+                            <td class="align-middle">
+                                <img th:src="${order.product.product_image_link}" class="img-fluid rounded-3"
+                                     style="width: 120px;" alt="Book">
+                            </td>
+
+                            <td class="align-middle">
+                                <div class="mb-2" th:text="${order.product.product_name}"></div>
+                            </td>
+                            <td class="align-middle">
+                                <div class="d-flex flex-row">
+                                    <button class="btn btn-link px-2"
+                                            onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+
+                                    <input id="form1" min="0" name="quantity" th:value="${order.quantity}"
+                                           type="number"
+                                           class="form-control form-control-sm" style="width: 50px;"/>
+
+                                    <button class="btn btn-link px-2"
+                                            onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <p class="mb-0" style="font-weight: 500;"
+                                   th:text="${order.product.product_price}+ ' 円'"></p>
+                            </td>
+                            <td class="align-middle">
+                                <p th:text="${order.product.category.category_name}"></p>
+                            </td>
+                            <td class="align-middle" th:text="${order.quantity * order.product.product_price} + ' 円'"></td>
+                        </tr>
+                        </tbody>
+
+                    </table>
+                    <div class="card shadow-2-strong mb-5 mb-lg-0" style="border-radius: 16px;">
+                        <div class="card-body p-4">
+                            <div class="row d-flex justify-content-center">
+                                <div class="col-lg-4 col-xl-3 d-flex justify-content-center">
+                                    <a th:href="@{/check_out}">
+                                        <button type="button" class="btn btn-primary btn-block btn-lg">
+                                            <div class="d-flex justify-content-between">
+                                                <span>支払い</span>
+                                            </div>
+                                        </button>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Footer-->
+
+
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Core theme JS-->
+
+</body>
+
+</html>
